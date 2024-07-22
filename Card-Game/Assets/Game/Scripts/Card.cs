@@ -43,15 +43,16 @@ public class Card : MonoBehaviour
 
         if (owner.selectedCards.Contains(this))
         {
+            owner.DeselectCard(this);
             FlipMovement();
-            return;
         }
-        else
+        else if (!owner.selectedCards.Contains(this))
         {
-            owner.SelectCard(this);
-        }
 
-        FlipMovement();
+            owner.SelectCard(this);
+            FlipMovement();
+        }
+        
     }
 
     public void FlipMovement()

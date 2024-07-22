@@ -28,6 +28,11 @@ public class Level : MonoBehaviour
         }
     }
 
+    public void DeselectCard(Card _card)
+    {
+        selectedCards.Remove(_card);
+    }
+
     private IEnumerator CheckPair()
     {
         levelCards.ForEach(x => x.canBeIntrectable = false);
@@ -42,7 +47,7 @@ public class Level : MonoBehaviour
         else
         {
             Debug.Log("NOT A MACTH!");
-            selectedCards.ForEach(x => x.Flip());            
+            selectedCards.ForEach(x => x.FlipMovement());            
         }
         selectedCards.Clear();
         levelCards.ForEach(x => x.canBeIntrectable = true);
