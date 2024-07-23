@@ -12,19 +12,28 @@ public enum CardState
 public class Card : MonoBehaviour
 {
     public int id;
+
     public CardState state;
     public Level owner;
 
+    [HideInInspector]public Vector3 targetPos;
+
     private bool canBeFlipped;
-    [HideInInspector]public  bool canBeIntrectable = true;
+    [HideInInspector] public bool canBeIntrectable;
 
 
     private void Start()
     {
+        targetPos = transform.position;
         state = CardState.CLOSED;
-        canBeFlipped = true;
     }
 
+    public void Init(Level _owner)
+    {
+        owner = _owner;
+        canBeFlipped = true;
+        canBeIntrectable = true;
+    }
     private void OnMouseDown()
     {
         if (!canBeIntrectable)
@@ -36,19 +45,13 @@ public class Card : MonoBehaviour
 
     public void Flip()
     {
-        if (!canBeFlipped)
+        if (!canBeFlipped || owner.selectedCards.Contains(this))
         {
             return;
         }
 
-        if (owner.selectedCards.Contains(this))
+        if (!owner.selectedCards.Contains(this))
         {
-            owner.DeselectCard(this);
-            FlipMovement();
-        }
-        else if (!owner.selectedCards.Contains(this))
-        {
-
             owner.SelectCard(this);
             FlipMovement();
         }
