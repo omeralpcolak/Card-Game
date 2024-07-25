@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7624974892054077983}
   - component: {fileID: 2470688076118381766}
   m_Layer: 0
-  m_Name: Card (3)
+  m_Name: CardD
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 341976076459445434}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7, y: 2.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46,10 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6314e34dec8f14ef09a0ab1d4910d64c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: 3
   state: 0
   owner: {fileID: 0}
-  targetTransform: {x: 0, y: 0, z: 0}
+  targetPos: {x: 0, y: 0, z: 0}
   canBeIntrectable: 1
 --- !u!65 &2470688076118381766
 BoxCollider:
@@ -208,7 +208,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -7040839111072765551, guid: 6549b0afeb0e6d84d8c4f70c48b74d2c, type: 3}
+  m_Sprite: {fileID: -5387503586379771150, guid: 6549b0afeb0e6d84d8c4f70c48b74d2c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

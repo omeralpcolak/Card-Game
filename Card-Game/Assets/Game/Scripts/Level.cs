@@ -4,28 +4,82 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 using UnityEngine.SceneManagement;
+
+
+[System.Serializable]
+public class GridMaker
+{
+    public int rows;
+    public int columns;
+
+    public float spacingX;
+    public float spacingY;
+
+    public List<Vector3> CreateGrid()
+    {
+        List<Vector3> cardPoses = new List<Vector3>();
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                Vector3 position = new Vector3(-3 + (col * spacingX), row * spacingY, 0);
+                cardPoses.Add(position);
+            }
+        }
+
+        return cardPoses;
+    }
+
+}
+
+
 public class Level : MonoBehaviour
 {
-    public List<Card> levelCards = new List<Card>();
-    public List<Card> selectedCards = new List<Card>();
+    public GridMaker grid;
+    public List<Card> cardTypes = new List<Card>();
+
+    [HideInInspector]public List<Card> levelCards = new List<Card>();
+    [HideInInspector]public List<Card> selectedCards = new List<Card>();
+
+    public List<Vector3> targetPoses => grid.CreateGrid();
+
     public Transform deckPos;
+
 
     private void Start()
     {
+        //StartCoroutine(DealTheCards());
+        CreateCards();
+    }
+
+    private void CreateCards()
+    {
+        for(int cardTypeIndex = 0; cardTypeIndex < cardTypes.Count; cardTypeIndex++)
+        {
+            for(int i = 0; i < 2; i++)
+            {
+                Card card = Instantiate(cardTypes[cardTypeIndex], deckPos.position,Quaternion.identity);
+                levelCards.Add(card);
+                card.gameObject.SetActive(false);
+            }
+        }
+
+        levelCards.Shuffle();
+
         StartCoroutine(DealTheCards());
     }
 
     private IEnumerator DealTheCards()
     {
-        levelCards.ForEach(x => x.gameObject.SetActive(false));
+        levelCards.ForEach(x => x.gameObject.SetActive(true));
         yield return new WaitForSeconds(1f);
-        levelCards.ForEach(x => x.targetPos = x.transform.position);
-        levelCards.ForEach(x => x.transform.position = deckPos.position);
+        //levelCards.ForEach(x => x.targetPos = x.transform.position);
+        //levelCards.ForEach(x => x.transform.position = deckPos.position);
 
         for (int i = 0; i < levelCards.Count; i++)
         {
             levelCards[i].gameObject.SetActive(true);
-            levelCards[i].transform.DOMove(levelCards[i].targetPos, 0.5f).SetEase(Ease.OutBack).SetDelay(0.3f * i + 0.01f);
+            levelCards[i].transform.DOMove(targetPoses[i], 0.5f).SetEase(Ease.OutBack).SetDelay(0.3f * i + 0.01f);
         }
 
 
@@ -58,12 +112,10 @@ public class Level : MonoBehaviour
 
         if(selectedCards[0].id == selectedCards[1].id)
         {
-            Debug.Log("A MATCH");
             selectedCards.ForEach(x => x.Dissolve());
         }
         else
         {
-            Debug.Log("NOT A MACTH!");
             selectedCards.ForEach(x => x.FlipMovement());            
         }
         selectedCards.Clear();
