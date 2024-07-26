@@ -48,7 +48,6 @@ public class Level : MonoBehaviour
 
     private void Start()
     {
-        //StartCoroutine(DealTheCards());
         CreateCards();
     }
 
@@ -60,21 +59,20 @@ public class Level : MonoBehaviour
             {
                 Card card = Instantiate(cardTypes[cardTypeIndex], deckPos.position,Quaternion.identity);
                 levelCards.Add(card);
+                card.transform.SetParent(transform);
                 card.gameObject.SetActive(false);
             }
         }
 
         levelCards.Shuffle();
-
+        deckPos.transform.parent = null;
         StartCoroutine(DealTheCards());
     }
 
     private IEnumerator DealTheCards()
     {
         levelCards.ForEach(x => x.gameObject.SetActive(true));
-        yield return new WaitForSeconds(1f);
-        //levelCards.ForEach(x => x.targetPos = x.transform.position);
-        //levelCards.ForEach(x => x.transform.position = deckPos.position);
+        yield return new WaitForSeconds(1f);        
 
         for (int i = 0; i < levelCards.Count; i++)
         {
@@ -116,10 +114,19 @@ public class Level : MonoBehaviour
         }
         else
         {
+            Shake();
             selectedCards.ForEach(x => x.FlipMovement());            
         }
         selectedCards.Clear();
         levelCards.ForEach(x => x.canBeIntrectable = true);
+    }
+
+    public void Shake()
+    {
+        Sequence shakeSequence = DOTween.Sequence();
+        shakeSequence.Append(transform.DOMoveX(0.1f, 0.1f))
+                     .Append(transform.DOMoveX(-0.1f, 0.1f))
+                     .Append(transform.DOMoveX(0, 0.1f));
     }
 
     public void CheckLevelState()
@@ -138,6 +145,12 @@ public class Level : MonoBehaviour
         {
             SceneManager.LoadScene("Game");
         }
+    }
+
+    private void OnDestroy()
+    {
+        transform.DOKill();
+        StopAllCoroutines();
     }
 
 }
