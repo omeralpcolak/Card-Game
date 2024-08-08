@@ -36,6 +36,7 @@ public class GridMaker
 public class Level : MonoBehaviour
 {
     public GridMaker grid;
+    public ComboCounter comboCounter;
     public List<Card> cardTypes = new List<Card>();
 
     [HideInInspector]public List<Card> levelCards = new List<Card>();
@@ -44,7 +45,6 @@ public class Level : MonoBehaviour
     public List<Vector3> targetPoses => grid.CreateGrid();
 
     public Transform deckPos;
-
 
     private void Start()
     {
@@ -57,7 +57,7 @@ public class Level : MonoBehaviour
         {
             for(int i = 0; i < 2; i++)
             {
-                Card card = Instantiate(cardTypes[cardTypeIndex], deckPos.position,Quaternion.identity);
+                Card card = Instantiate(cardTypes[cardTypeIndex], deckPos);
                 levelCards.Add(card);
                 card.transform.SetParent(transform);
                 card.gameObject.SetActive(false);
@@ -80,7 +80,7 @@ public class Level : MonoBehaviour
             levelCards[i].transform.DOMove(targetPoses[i], 0.5f).SetEase(Ease.OutBack).SetDelay(0.3f * i + 0.01f);
         }
 
-
+        
         DOVirtual.DelayedCall((0.3f * (levelCards.Count - 1) + 0.01f) + 0.5f, () => levelCards.ForEach(x => x.Init(this)));
     }
 
@@ -106,16 +106,18 @@ public class Level : MonoBehaviour
     {
         levelCards.ForEach(x => x.canBeIntrectable = false);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
 
         if(selectedCards[0].id == selectedCards[1].id)
         {
+            comboCounter.Show();
             selectedCards.ForEach(x => x.Dissolve());
         }
         else
         {
+            comboCounter.Reset();
             Shake();
-            selectedCards.ForEach(x => x.FlipMovement());            
+            selectedCards.ForEach(x => x.FlipMovement());                            
         }
         selectedCards.Clear();
         levelCards.ForEach(x => x.canBeIntrectable = true);
@@ -143,13 +145,21 @@ public class Level : MonoBehaviour
 
         if (allInactive)
         {
-            SceneManager.LoadScene("Game");
+            OnLevelComplete();
+            LevelCompletePopup.Show();
         }
+    }
+
+    private void OnLevelComplete()
+    {
+        deckPos.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
+        comboCounter.Reset();
     }
 
     private void OnDestroy()
     {
         transform.DOKill();
+        deckPos.DOKill();
         StopAllCoroutines();
     }
 
