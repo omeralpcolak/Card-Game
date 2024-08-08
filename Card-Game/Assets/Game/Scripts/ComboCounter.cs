@@ -22,8 +22,7 @@ public class ComboCounter : MonoBehaviour
             if(comboTitle.gameObject.activeSelf == false)
             {
                 comboTitle.gameObject.SetActive(true);
-                comboTitle.transform.DOScale(Vector3.one, 0.3f).ChangeStartValue(Vector3.zero).SetEase(Ease.OutBack);
-                //comboTitle.transform.localScale = Vector3.one;
+                comboTitle.transform.DOScale(Vector3.one, 0.3f).ChangeStartValue(Vector3.zero).SetEase(Ease.OutBack);                
             }
 
             if(countTxt.gameObject.activeSelf == false)

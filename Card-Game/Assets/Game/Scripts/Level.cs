@@ -46,6 +46,8 @@ public class Level : MonoBehaviour
 
     public Transform deckPos;
 
+    public ParticleSystem confetti;
+
     private void Start()
     {
         CreateCards();
@@ -154,6 +156,7 @@ public class Level : MonoBehaviour
     {
         deckPos.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
         comboCounter.Reset();
+        confetti.gameObject.SetActive(true);
     }
 
     private void OnDestroy()
