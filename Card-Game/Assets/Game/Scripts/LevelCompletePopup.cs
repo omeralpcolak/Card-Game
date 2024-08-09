@@ -46,7 +46,7 @@ public class LevelCompletePopup : MonoBehaviour
 
     public void OnRestartButtonClicked()
     {
-        SceneManager.LoadScene("Game");
+        SceneTransition.Reload();
     }
 
     public void OnMainMenuButtonClicked()
