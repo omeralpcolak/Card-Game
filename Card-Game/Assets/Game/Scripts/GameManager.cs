@@ -7,9 +7,10 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public Shatter shatter;
 
-    public Transform goldIcon;
+    public Shatter shatter;
+    public Level currentLevel;
+    
 
     private void Awake()
     {

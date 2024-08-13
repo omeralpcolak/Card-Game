@@ -19,14 +19,14 @@ public class SceneTransition : MonoBehaviour
     public static void Load(string _sceneName)
     {
         DOTween.KillAll();
-        //Time.timeScale = 0;
+        Time.timeScale = 0;
         Create().LoadClass(_sceneName);
     }
 
     public static void Reload()
     {
         DOTween.KillAll();
-        //Time.timeScale = 0;
+        Time.timeScale = 0;
         Create().LoadClass(SceneManager.GetActiveScene().name);
     }
 
@@ -46,11 +46,8 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator Transition(string _sceneName)
     {
-        //Change Transition Effect!!
-
-        float yPos = -2500;
         
-        Tween _tween = image.DOAnchorPosY(yPos,0.5f).SetUpdate(true);
+        Tween _tween = image.transform.DOScale(new Vector3(20, 20, 20), tweenDuration).SetEase(Ease.Linear).ChangeStartValue(Vector3.zero).SetUpdate(true);
         yield return _tween.WaitForKill();
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_sceneName);
         while (!asyncLoad.isDone)
@@ -59,8 +56,7 @@ public class SceneTransition : MonoBehaviour
         }
         Time.timeScale = 1;
         yield return new WaitForEndOfFrame();
-        yPos = 2500;
-        _tween = image.DOAnchorPosY(yPos, 0.5f).SetUpdate(true);
+        _tween = image.transform.DOScale(0, tweenDuration).SetEase(Ease.Linear).SetUpdate(true);
         yield return _tween.WaitForKill();
         Destroy(gameObject);
     }

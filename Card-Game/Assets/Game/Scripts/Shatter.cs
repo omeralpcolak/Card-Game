@@ -17,6 +17,7 @@ public class Shatter : MonoBehaviour
     }
 
     public GameObject goldObject;
+    public RectTransform goldTargetPos;
 
 
     private void GoldObject(Card _card, int _goldAmount)
@@ -30,7 +31,7 @@ public class Shatter : MonoBehaviour
             
             goldObjIns.transform.DOLocalMove(_card.transform.position + new Vector3(0, Random.Range(1f,2f), Random.Range(-3f,-5f)), 0.3f).SetDelay(i * 0.02f + 0.2f).OnComplete(() =>
             {
-                goldObjIns.transform.SetParent(GameManager.instance.goldIcon);
+                goldObjIns.transform.SetParent(goldTargetPos);
                 goldObjIns.transform.DOLocalMove(Vector3.zero, 0.7f).SetEase(Ease.OutBack).OnComplete(() =>
                 {
                     Destroy(goldObjIns);
